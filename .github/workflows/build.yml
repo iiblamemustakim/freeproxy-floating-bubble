@@ -1,0 +1,40 @@
+name: Build FreeProxy APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Extract source ZIP
+        run: unzip -q free-proxy-floating-bubble-source.zip -d extracted
+
+      - name: Build debug APK
+        run: |
+          cd extracted/free-proxy-main
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: FreeProxy-debug-APK
+          path: extracted/free-proxy-main/app/build/outputs/apk/debug/*.apk
