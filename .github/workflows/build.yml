@@ -22,7 +22,7 @@ jobs:
           java-version: '21'
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
 
       - name: Extract source ZIP
         run: unzip -q free-proxy-floating-bubble-source.zip -d extracted
